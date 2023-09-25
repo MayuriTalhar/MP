@@ -1,0 +1,36 @@
+pipeline {
+    agent none
+    tools{
+      maven 'maven3'
+    }
+    
+    stages {
+        stage('Compile on Slave 1') {
+            agent { label 'slave1' }
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Compile on Slave 2') {
+            agent { label 'slave2' }
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+        
+        stage('Test on Slave 1') {
+            agent { label 'slave1' }
+            steps {
+                sh 'mvn test'
+            }
+        }
+        
+        stage('Test on Slave 2') {
+            agent { label 'slave2' }
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
+}
